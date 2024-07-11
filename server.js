@@ -1,18 +1,23 @@
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
+import { configDotenv } from "dotenv";
+
+configDotenv({
+  path: [".env.local", ".env"],
+});
 
 const app = express();
 
-// Load the appropriate .env file based on the environment
-if (process.env.NODE_ENV === "production") {
-  dotenv.config({ path: ".env" });
-} else {
-  dotenv.config({ path: ".env.local" });
-}
+// Middleware
+app.use(cors());
+app.use(express.json());
 
-const PORT = 5000;
+const port = process.env.PORT;
 
-app.listen(PORT, () => {
-  console.log(`Server running on PORT: ${PORT}`);
+app.get("/", (req, res, next) => {
+  res.send("Hello world");
+});
+
+app.listen(port, () => {
+  console.log(`Server running on port: ${port}`);
 });
